@@ -90,7 +90,7 @@ Bila nanti VM diganti dengan server baru di penyedia mana pun (Oracle Always Fre
 * **AIO Web Control Center (`dash.ohana.biz.id`):** `admin` / `admin123`
 * **Web Terminal Console (`console.ohana.biz.id`):** `admin` / `admin123`
 * **Remote Desktop GUI (xRDP Port 3389):** User: `eardisis` / Sandi: `admin123`
-* **FileBrowser Storage (`files.ohana.biz.id`):** `admin` / `admin`
+* **FileBrowser Storage (`files.ohana.biz.id`):** `admin` / `AdminOhana2026` *(kebijakan FileBrowser mewajibkan min. 12 karakter)*
 * **Google Gemini API Key:** Tersimpan di `/opt/app-data/openbot/config.json` dan `/etc/environment` (variabel `GEMINI_API_KEY`)
 * **Path Kunci SSH VM (Host Lokal):**
   `C:\Users\eardisis\.ssh\google_compute_engine`
