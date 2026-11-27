@@ -1,0 +1,94 @@
+services:
+  # 1. Portainer CE (Port 9000)
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: unless-stopped
+    security_opt:
+      - no-new-privileges:true
+    ports:
+      - "9000:9000"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /opt/app-data/portainer:/data
+
+  # 2. AdGuard Home (Port 3000 Web UI)
+  adguardhome:
+    image: adguard/adguardhome:latest
+    container_name: adguardhome
+    restart: unless-stopped
+    ports:
+      - "3000:3000/tcp"
+    volumes:
+      - /opt/app-data/adguard/work:/opt/adguardhome/work
+      - /opt/app-data/adguard/conf:/opt/adguardhome/conf
+
+  # 3. RustDesk Server (hbbs & hbbr)
+  rustdesk-hbbs:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk-hbbs
+    command: hbbs -r 0.0.0.0:21117
+    restart: unless-stopped
+    ports:
+      - "21115:21115"
+      - "21116:21116"
+      - "21116:21116/udp"
+      - "21118:21118"
+    volumes:
+      - /opt/app-data/rustdesk:/root
+    depends_on:
+      - rustdesk-hbbr
+
+  rustdesk-hbbr:
+    image: rustdesk/rustdesk-server:latest
+    container_name: rustdesk-hbbr
+    command: hbbr
+    restart: unless-stopped
+    ports:
+      - "21117:21117"
+      - "21119:21119"
+    volumes:
+      - /opt/app-data/rustdesk:/root
+
+  # 4. OpenBot (Agent Engine)
+  openbot:
+    image: alpine:latest
+    container_name: openbot
+    restart: unless-stopped
+    command: sh -c "echo 'OpenBot workspace ready' > /data/README.txt && tail -f /dev/null"
+    volumes:
+      - /opt/app-data/openbot:/data
+
+  # 5. AnythingLLM (Port 3001)
+  anythingllm:
+    image: mintplexlabs/anythingllm:latest
+    container_name: anythingllm
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    environment:
+      - STORAGE_DIR=/app/server/storage
+    volumes:
+      - /opt/app-data/anythingllm:/app/server/storage
+
+  # 6. MeTube (Port 8081)
+  metube:
+    image: ghcr.io/alexta69/metube:latest
+    container_name: metube
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    volumes:
+      - /opt/app-data/metube/downloads:/downloads
+
+  # 7. FileBrowser (Port 8080)
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - /opt/app-data/filebrowser/data:/srv
+      - /opt/app-data/filebrowser/database/filebrowser.db:/database/filebrowser.db

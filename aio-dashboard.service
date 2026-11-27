@@ -1,0 +1,14 @@
+[Unit]
+Description=AIO Cloud Server Control Center & OpenBot Gateway
+After=network.target docker.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/app-data
+ExecStart=/usr/bin/python3 /opt/app-data/dashboard_server.py
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target
